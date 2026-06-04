@@ -71,16 +71,16 @@ const History = () => {
           {scans.map((scan, i) => (
             <motion.div key={i} variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <Card className="hover:shadow-card transition-shadow">
-                <CardContent className="p-4 flex items-center gap-4">
+                <CardContent className="p-4 flex items-center gap-3 sm:gap-4">
                   <HealthGauge score={scan.score} size={56} />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <Leaf className="w-4 h-4 text-primary" />
-                      <span className="font-semibold text-card-foreground">{scan.plant}</span>
+                      <Leaf className="w-4 h-4 text-primary shrink-0" />
+                      <span className="font-semibold text-card-foreground truncate">{scan.plant}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">{scan.disease}</p>
+                    <p className="text-sm text-muted-foreground truncate">{scan.disease}</p>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground shrink-0">
                     <Calendar className="w-3.5 h-3.5" />
                     {scan.date}
                   </div>
