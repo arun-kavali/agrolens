@@ -174,7 +174,7 @@ const Scan = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex justify-center gap-6 mt-8"
+          className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-8"
         >
           {tips.map((tip) => (
             <div key={tip.text} className="flex items-center gap-2 text-sm text-muted-foreground">
