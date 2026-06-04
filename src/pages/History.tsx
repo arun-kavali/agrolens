@@ -55,9 +55,9 @@ const History = () => {
                   </motion.div>
                 ))}
               </div>
-              <div className="flex gap-3 mt-2">
+              <div className="flex gap-2 sm:gap-3 mt-2">
                 {scans.slice().reverse().map((s, i) => (
-                  <div key={i} className="flex-1 text-center text-[10px] text-muted-foreground truncate">
+                  <div key={i} className="flex-1 min-w-0 text-center text-[10px] text-muted-foreground truncate">
                     {s.date.slice(0, 6)}
                   </div>
                 ))}
