@@ -88,11 +88,24 @@ const Scan = () => {
                 <input
                   ref={fileRef}
                   type="file"
-                  accept="image/jpeg,image/png"
+                  accept="image/*"
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) handleFile(file);
+                    e.target.value = "";
+                  }}
+                />
+                <input
+                  ref={cameraRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFile(file);
+                    e.target.value = "";
                   }}
                 />
                 <motion.div
@@ -102,16 +115,16 @@ const Scan = () => {
                   <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mb-4 shadow-primary">
                     <Upload className="w-8 h-8 text-primary-foreground" />
                   </div>
-                  <p className="text-lg font-semibold text-foreground mb-1">
+                  <p className="text-lg font-semibold text-foreground mb-1 px-2">
                     {isDragging ? "Drop your image here" : "Drag & drop leaf image"}
                   </p>
-                  <p className="text-sm text-muted-foreground mb-6">JPG, PNG supported</p>
-                  <div className="flex gap-3">
+                  <p className="text-sm text-muted-foreground mb-6">JPG, PNG, WEBP supported</p>
+                  <div className="flex flex-wrap justify-center gap-3">
                     <Button variant="outline" className="gap-2" onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}>
                       <Upload className="w-4 h-4" />
                       Upload
                     </Button>
-                    <Button variant="outline" className="gap-2" onClick={(e) => e.stopPropagation()}>
+                    <Button variant="outline" className="gap-2" onClick={(e) => { e.stopPropagation(); cameraRef.current?.click(); }}>
                       <Camera className="w-4 h-4" />
                       Camera
                     </Button>
