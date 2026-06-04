@@ -23,6 +23,14 @@ import { t } from "@/lib/languages";
 import { generatePdfReport } from "@/lib/generatePdf";
 import { toast } from "sonner";
 
+// Static color class map so Tailwind JIT can detect these classes
+const causeColorClasses: Record<string, string> = {
+  destructive: "text-destructive",
+  primary: "text-primary",
+  warning: "text-warning",
+  "muted-foreground": "text-muted-foreground",
+};
+
 // Icon mapping for causes
 const causeIcons: Record<string, any> = {
   destructive: Bug,
@@ -283,13 +291,15 @@ const Results = () => {
 
         {/* Tabs - only show relevant ones */}
         <Tabs defaultValue={result.isHealthy ? "prevention" : "treatment"} className="mb-8">
-          <TabsList className={`grid w-full max-w-2xl ${result.isHealthy ? "grid-cols-2" : "grid-cols-5"}`}>
-            {!result.isHealthy && <TabsTrigger value="causes">{t(lang, "causes")}</TabsTrigger>}
-            {!result.isHealthy && <TabsTrigger value="treatment">{t(lang, "treatment")}</TabsTrigger>}
-            {!result.isHealthy && <TabsTrigger value="medicine">{t(lang, "medicine")}</TabsTrigger>}
-            <TabsTrigger value="prevention">{t(lang, "prevention")}</TabsTrigger>
-            {!result.isHealthy && <TabsTrigger value="cost">{t(lang, "costEstimator")}</TabsTrigger>}
-          </TabsList>
+          <div className="w-full overflow-x-auto -mx-1 px-1 mb-2">
+            <TabsList className="inline-flex w-max min-w-full sm:w-full sm:max-w-2xl sm:grid sm:gap-1 sm:auto-cols-fr sm:grid-flow-col">
+              {!result.isHealthy && <TabsTrigger value="causes" className="text-xs sm:text-sm whitespace-nowrap">{t(lang, "causes")}</TabsTrigger>}
+              {!result.isHealthy && <TabsTrigger value="treatment" className="text-xs sm:text-sm whitespace-nowrap">{t(lang, "treatment")}</TabsTrigger>}
+              {!result.isHealthy && <TabsTrigger value="medicine" className="text-xs sm:text-sm whitespace-nowrap">{t(lang, "medicine")}</TabsTrigger>}
+              <TabsTrigger value="prevention" className="text-xs sm:text-sm whitespace-nowrap">{t(lang, "prevention")}</TabsTrigger>
+              {!result.isHealthy && <TabsTrigger value="cost" className="text-xs sm:text-sm whitespace-nowrap">{t(lang, "costEstimator")}</TabsTrigger>}
+            </TabsList>
+          </div>
 
           {/* Causes */}
           {!result.isHealthy && (
@@ -300,7 +310,7 @@ const Results = () => {
                   return (
                     <motion.div key={i} variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
                       <Card className="text-center p-6 hover:shadow-card transition-shadow">
-                        <Icon className={`w-10 h-10 mx-auto mb-3 text-${c.color}`} />
+                        <Icon className={`w-10 h-10 mx-auto mb-3 ${causeColorClasses[c.color] || "text-primary"}`} />
                         <p className="text-sm font-medium text-card-foreground">{c.label}</p>
                       </Card>
                     </motion.div>

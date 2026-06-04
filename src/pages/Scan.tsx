@@ -15,6 +15,7 @@ const Scan = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleFile = useCallback((file: File) => {
@@ -77,7 +78,7 @@ const Scan = () => {
                 onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
-                className={`relative border-2 border-dashed rounded-2xl p-12 text-center transition-all cursor-pointer ${
+                className={`relative border-2 border-dashed rounded-2xl p-6 sm:p-12 text-center transition-all cursor-pointer ${
                   isDragging
                     ? "border-primary bg-primary/5 scale-[1.02]"
                     : "border-border hover:border-primary/50 hover:bg-accent/50"
@@ -87,11 +88,24 @@ const Scan = () => {
                 <input
                   ref={fileRef}
                   type="file"
-                  accept="image/jpeg,image/png"
+                  accept="image/*"
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) handleFile(file);
+                    e.target.value = "";
+                  }}
+                />
+                <input
+                  ref={cameraRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFile(file);
+                    e.target.value = "";
                   }}
                 />
                 <motion.div
@@ -101,16 +115,16 @@ const Scan = () => {
                   <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mb-4 shadow-primary">
                     <Upload className="w-8 h-8 text-primary-foreground" />
                   </div>
-                  <p className="text-lg font-semibold text-foreground mb-1">
+                  <p className="text-lg font-semibold text-foreground mb-1 px-2">
                     {isDragging ? "Drop your image here" : "Drag & drop leaf image"}
                   </p>
-                  <p className="text-sm text-muted-foreground mb-6">JPG, PNG supported</p>
-                  <div className="flex gap-3">
+                  <p className="text-sm text-muted-foreground mb-6">JPG, PNG, WEBP supported</p>
+                  <div className="flex flex-wrap justify-center gap-3">
                     <Button variant="outline" className="gap-2" onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}>
                       <Upload className="w-4 h-4" />
                       Upload
                     </Button>
-                    <Button variant="outline" className="gap-2" onClick={(e) => e.stopPropagation()}>
+                    <Button variant="outline" className="gap-2" onClick={(e) => { e.stopPropagation(); cameraRef.current?.click(); }}>
                       <Camera className="w-4 h-4" />
                       Camera
                     </Button>
@@ -140,11 +154,11 @@ const Scan = () => {
                     <X className="w-4 h-4" />
                   </Button>
                 </div>
-                <div className="p-4 flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground truncate max-w-[200px]">{fileName}</span>
+                <div className="p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+                  <span className="text-sm text-muted-foreground truncate min-w-0 sm:max-w-[200px]">{fileName}</span>
                   <Button
                     onClick={handleAnalyze}
-                    className="gradient-primary shadow-primary gap-2 text-primary-foreground border-0"
+                    className="gradient-primary shadow-primary gap-2 text-primary-foreground border-0 w-full sm:w-auto"
                   >
                     <ScanLine className="w-4 h-4" />
                     Analyze Leaf
@@ -160,7 +174,7 @@ const Scan = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex justify-center gap-6 mt-8"
+          className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-8"
         >
           {tips.map((tip) => (
             <div key={tip.text} className="flex items-center gap-2 text-sm text-muted-foreground">
