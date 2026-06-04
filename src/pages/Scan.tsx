@@ -78,7 +78,7 @@ const Scan = () => {
                 onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                 onDragLeave={() => setIsDragging(false)}
                 onDrop={handleDrop}
-                className={`relative border-2 border-dashed rounded-2xl p-12 text-center transition-all cursor-pointer ${
+                className={`relative border-2 border-dashed rounded-2xl p-6 sm:p-12 text-center transition-all cursor-pointer ${
                   isDragging
                     ? "border-primary bg-primary/5 scale-[1.02]"
                     : "border-border hover:border-primary/50 hover:bg-accent/50"
