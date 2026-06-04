@@ -23,6 +23,14 @@ import { t } from "@/lib/languages";
 import { generatePdfReport } from "@/lib/generatePdf";
 import { toast } from "sonner";
 
+// Static color class map so Tailwind JIT can detect these classes
+const causeColorClasses: Record<string, string> = {
+  destructive: "text-destructive",
+  primary: "text-primary",
+  warning: "text-warning",
+  "muted-foreground": "text-muted-foreground",
+};
+
 // Icon mapping for causes
 const causeIcons: Record<string, any> = {
   destructive: Bug,
