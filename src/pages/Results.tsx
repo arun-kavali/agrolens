@@ -308,7 +308,7 @@ const Results = () => {
                   return (
                     <motion.div key={i} variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
                       <Card className="text-center p-6 hover:shadow-card transition-shadow">
-                        <Icon className={`w-10 h-10 mx-auto mb-3 text-${c.color}`} />
+                        <Icon className={`w-10 h-10 mx-auto mb-3 ${causeColorClasses[c.color] || "text-primary"}`} />
                         <p className="text-sm font-medium text-card-foreground">{c.label}</p>
                       </Card>
                     </motion.div>
