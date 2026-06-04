@@ -70,9 +70,9 @@ const Index = () => {
                     Start Scan
                   </Button>
                 </Link>
-                <Link to="/results/demo">
+                <Link to="/guide">
                   <Button size="lg" variant="outline" className="gap-2">
-                    View Demo
+                    Plant Guide
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
