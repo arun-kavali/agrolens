@@ -154,11 +154,11 @@ const Scan = () => {
                     <X className="w-4 h-4" />
                   </Button>
                 </div>
-                <div className="p-4 flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground truncate max-w-[200px]">{fileName}</span>
+                <div className="p-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:justify-between">
+                  <span className="text-sm text-muted-foreground truncate min-w-0 sm:max-w-[200px]">{fileName}</span>
                   <Button
                     onClick={handleAnalyze}
-                    className="gradient-primary shadow-primary gap-2 text-primary-foreground border-0"
+                    className="gradient-primary shadow-primary gap-2 text-primary-foreground border-0 w-full sm:w-auto"
                   >
                     <ScanLine className="w-4 h-4" />
                     Analyze Leaf
