@@ -388,21 +388,29 @@ const Results = () => {
           {/* Prevention */}
           <TabsContent value="prevention" className="mt-6">
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {result.preventions.map((tip, i) => {
-                const Icon = preventionIcons[i % preventionIcons.length];
-                return (
-                  <motion.div key={i} variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                    <Card className="text-center p-6 hover:shadow-card transition-shadow">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                        <Icon className="w-6 h-6 text-primary" />
-                      </div>
-                      <p className="text-sm font-medium text-card-foreground">{tip}</p>
-                    </Card>
-                  </motion.div>
-                );
-              })}
+              {(result.preventions || [])
+                .map((tip: any) => {
+                  if (!tip) return "";
+                  if (typeof tip === "string") return tip;
+                  return tip.label || tip.title || tip.text || tip.description || tip.tip || "";
+                })
+                .filter((tip: string) => tip.trim().length > 0)
+                .map((tip: string, i: number) => {
+                  const Icon = preventionIcons[i % preventionIcons.length];
+                  return (
+                    <motion.div key={i} variants={fadeUp} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                      <Card className="text-center p-6 hover:shadow-card transition-shadow h-full flex flex-col items-center justify-start">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 flex-shrink-0">
+                          <Icon className="w-6 h-6 text-primary" />
+                        </div>
+                        <p className="text-sm font-medium text-card-foreground leading-relaxed break-words">{tip}</p>
+                      </Card>
+                    </motion.div>
+                  );
+                })}
             </div>
           </TabsContent>
+
 
           {/* Cost Estimator */}
           {!result.isHealthy && (
