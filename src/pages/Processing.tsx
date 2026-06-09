@@ -62,6 +62,11 @@ const Processing = () => {
       return;
     }
 
+    if (sessionStorage.getItem("analysisResult")) {
+      navigate("/results/analysis", { replace: true });
+      return;
+    }
+
     let cancelled = false;
 
     const analyze = async () => {
