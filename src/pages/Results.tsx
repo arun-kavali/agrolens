@@ -96,6 +96,76 @@ const Results = () => {
     );
   }
 
+  const isNotPlant = result.isPlant === false;
+
+  if (isNotPlant) {
+    return (
+      <div className="min-h-screen pt-16">
+        <div className="container mx-auto px-4 py-8 max-w-3xl">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-1">Analysis Results</h1>
+            <p className="text-muted-foreground text-sm">Image classification</p>
+          </motion.div>
+
+          <Card className="border-warning/40 bg-warning/5 mb-6">
+            <CardContent className="p-6 flex items-start gap-4">
+              <AlertTriangle className="w-8 h-8 text-warning flex-shrink-0 mt-1" />
+              <div>
+                <h2 className="text-lg font-bold text-foreground mb-1">This is not a plant</h2>
+                <p className="text-sm text-muted-foreground mb-2">
+                  The image appears to be:{" "}
+                  <span className="font-semibold text-foreground">
+                    {result.detectedObject || "an unrecognized object"}
+                  </span>
+                </p>
+                <p className="text-sm text-muted-foreground">{result.description}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid sm:grid-cols-2 gap-6 mb-6">
+            <Card className="overflow-hidden">
+              <div className="aspect-video bg-muted flex items-center justify-center">
+                {scanImage ? (
+                  <img src={scanImage} alt="Uploaded" className="w-full h-full object-contain" />
+                ) : (
+                  <Leaf className="w-20 h-20 text-primary/30" />
+                )}
+              </div>
+            </Card>
+            <Card>
+              <CardContent className="p-6 space-y-3">
+                <div>
+                  <p className="text-xs text-muted-foreground">Detected Object</p>
+                  <p className="text-xl font-bold text-foreground">{result.detectedObject || "Unknown"}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Detection Confidence</p>
+                  <div className="flex items-center gap-3">
+                    <Progress value={result.confidence} className="h-2 flex-1" />
+                    <span className="text-sm font-semibold text-primary">{result.confidence}%</span>
+                  </div>
+                </div>
+                <div className="pt-2 text-sm text-muted-foreground">
+                  Please upload a clear photo of a plant or leaf for disease analysis.
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="flex gap-3">
+            <Button onClick={() => navigate("/scan")} className="flex-1">
+              Scan a Plant
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/")} className="flex-1">
+              Go Home
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const getHealthLabel = () => {
     const s = result.healthScore;
     if (s >= 80) return t(lang, "healthy");
