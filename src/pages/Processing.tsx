@@ -26,6 +26,10 @@ const runAnalysisOnce = (image: string) => {
         throw new Error(data.error);
       }
 
+      if (!data || typeof data !== "object") {
+        throw new Error("Analysis returned an empty response");
+      }
+
       return data as AnalysisResponse;
     })
     .finally(() => {
