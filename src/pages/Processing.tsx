@@ -6,6 +6,38 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
+type AnalysisResponse = Record<string, unknown>;
+
+let activeAnalysis: { image: string; promise: Promise<AnalysisResponse> } | null = null;
+
+const runAnalysisOnce = (image: string) => {
+  if (activeAnalysis?.image === image) {
+    return activeAnalysis.promise;
+  }
+
+  const promise = supabase.functions
+    .invoke("analyze-plant", { body: { imageBase64: image } })
+    .then(({ data, error: fnError }) => {
+      if (fnError) {
+        throw new Error(fnError.message || "Analysis failed");
+      }
+
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
+      return data as AnalysisResponse;
+    })
+    .finally(() => {
+      if (activeAnalysis?.promise === promise) {
+        activeAnalysis = null;
+      }
+    });
+
+  activeAnalysis = { image, promise };
+  return promise;
+};
+
 const steps = [
   { icon: Cpu, label: "Image Processing", duration: 1200 },
   { icon: Search, label: "Disease Detection", duration: 1500 },
@@ -16,6 +48,7 @@ const Processing = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [retryKey, setRetryKey] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,19 +73,7 @@ const Processing = () => {
         setCurrentStep(1);
         setProgress(50);
 
-        const { data, error: fnError } = await supabase.functions.invoke("analyze-plant", {
-          body: { imageBase64: img },
-        });
-
-        if (cancelled) return;
-
-        if (fnError) {
-          throw new Error(fnError.message || "Analysis failed");
-        }
-
-        if (data?.error) {
-          throw new Error(data.error);
-        }
+        const data = await runAnalysisOnce(img);
 
         // Step 3: Generating Report
         setCurrentStep(2);
@@ -84,7 +105,7 @@ const Processing = () => {
       cancelled = true;
       clearTimeout(timeout);
     };
-  }, [navigate]);
+  }, [navigate, retryKey]);
 
   if (error) {
     return (
@@ -101,12 +122,11 @@ const Processing = () => {
             </Button>
             <Button
               onClick={() => {
+                activeAnalysis = null;
                 setError(null);
                 setCurrentStep(0);
                 setProgress(0);
-                // Re-trigger by navigating to self
-                navigate("/processing", { replace: true });
-                window.location.reload();
+                setRetryKey((key) => key + 1);
               }}
             >
               Retry Analysis
