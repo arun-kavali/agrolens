@@ -32,7 +32,7 @@ const App = () => (
     <TooltipProvider>
       <LanguageProvider>
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
           <Navbar />
           <Suspense fallback={<PageFallback />}>
             <Routes>
