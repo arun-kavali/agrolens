@@ -44,6 +44,8 @@ const treatmentIcons = [Scissors, SprayCan, Wind, Waves];
 const preventionIcons = [Droplets, Sprout, TestTube, ShieldCheck];
 
 interface AnalysisResult {
+  isPlant?: boolean;
+  detectedObject?: string;
   isHealthy: boolean;
   diseaseName: string;
   confidence: number;
