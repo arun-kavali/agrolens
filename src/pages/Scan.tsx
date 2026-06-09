@@ -16,6 +16,7 @@ const Scan = () => {
   const [fileName, setFileName] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
+  const isNavigatingRef = useRef(false);
   const navigate = useNavigate();
 
   const handleFile = useCallback((file: File) => {
@@ -37,11 +38,12 @@ const Scan = () => {
   );
 
   const handleAnalyze = () => {
-    if (preview) {
-      // Store in sessionStorage for results page
-      sessionStorage.setItem("scanImage", preview);
-      navigate("/processing");
-    }
+    if (!preview || isNavigatingRef.current) return;
+
+    isNavigatingRef.current = true;
+    sessionStorage.removeItem("analysisResult");
+    sessionStorage.setItem("scanImage", preview);
+    navigate("/processing");
   };
 
   return (
